@@ -14,6 +14,6 @@ def add_note():
     pass
 
 
-@app.route('/notes/<str:hash>', methods=['GET'])
+@app.route('/notes/<string:hash>', methods=['GET'])
 def get_note(hash):
     pass
