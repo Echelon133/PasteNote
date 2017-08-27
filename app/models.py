@@ -1,7 +1,8 @@
+from exceptions import CannotCreateEmptyNote, InvalidExpirationFieldValue
 from sqlalchemy import (Column, String, Text, Bool, DateTime)
-from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from exceptions import CannotCreateEmptyNote
+from helper_functions import get_hash
+from sqlalchemy import create_engine
 import datetime
 
 
@@ -16,6 +17,9 @@ class Notes(Base):
     content = Column(Text())
     expired = Column(Bool())
 
+    def set_hash(self):
+        self.hash = get_hash()
+
     def set_title(self, title):
         if title:
             self.title = title
@@ -23,7 +27,6 @@ class Notes(Base):
             self.title = 'Untitled'
 
     def set_expiration(self, num):
-        
         self.HOURS = {0: (1, 'One hour'), 
                       1: (6, 'Six hours'),
                       2: (12, 'Twelve hours'),
@@ -32,9 +35,14 @@ class Notes(Base):
                       5: (-1, 'Never')}
         
         now = datetime.datetime.now()
-        additional_hours = self.HOURS[num][0]
-        expiration = now + datetime.timedelta(hours=additional_hours)
-        self.expiration = expiration
+
+        try:
+            additional_hours = self.HOURS[num][0]
+        except KeyError:
+            raise InvalidExpirationFieldValue
+        else:
+            expiration = now + datetime.timedelta(hours=additional_hours)
+            self.expiration = expiration
 
     def set_content(self, content):
         if content:
