@@ -41,3 +41,7 @@ class Notes(Base):
     @property
     def serialize(self):
         return {'hash': self.hash, 'title': self.title, 'content': self.content}
+
+
+engine = create_engine('sqlite:///database.db')
+Base.metadata.create_all(engine)
