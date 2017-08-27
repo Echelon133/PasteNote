@@ -33,6 +33,10 @@ class Notes(Base):
                       3: (24, 'One day'),
                       4: (24 * 7, 'One week'), 
                       5: (-1, 'Never')}
+        try:
+            num = int(num)
+        except ValueError:
+            raise InvalidExpirationFieldValue()
 
         if num == 5:
             # Set expiration date to the max value possible
@@ -43,7 +47,7 @@ class Notes(Base):
             try:
                 additional_hours = self.HOURS[num][0]
             except KeyError:
-                raise InvalidExpirationFieldValue
+                raise InvalidExpirationFieldValue()
             else:
                 expiration = now + datetime.timedelta(hours=additional_hours)
                 self.expiration = expiration
