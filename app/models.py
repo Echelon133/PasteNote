@@ -1,7 +1,7 @@
-from exceptions import CannotCreateEmptyNote, InvalidExpirationFieldValue
-from sqlalchemy import (Column, String, Text, Bool, DateTime)
+from .exceptions import CannotCreateEmptyNote, InvalidExpirationFieldValue
+from sqlalchemy import (Column, String, Text, Boolean, DateTime)
 from sqlalchemy.ext.declarative import declarative_base
-from helper_functions import get_hash
+from .helper_functions import get_hash
 from sqlalchemy import create_engine
 import datetime
 
@@ -15,7 +15,7 @@ class Notes(Base):
     title = Column(String())
     expiration = Column(DateTime())
     content = Column(Text())
-    expired = Column(Bool())
+    expired = Column(Boolean())
 
     def set_hash(self):
         self.hash = get_hash()
