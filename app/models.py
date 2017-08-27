@@ -33,16 +33,20 @@ class Notes(Base):
                       3: (24, 'One day'),
                       4: (24 * 7, 'One week'), 
                       5: (-1, 'Never')}
-        
-        now = datetime.datetime.now()
 
-        try:
-            additional_hours = self.HOURS[num][0]
-        except KeyError:
-            raise InvalidExpirationFieldValue
+        if num == 5:
+            # Set expiration date to the max value possible
+            self.expiration = datetime.datetime.max
         else:
-            expiration = now + datetime.timedelta(hours=additional_hours)
-            self.expiration = expiration
+            now = datetime.datetime.now()
+
+            try:
+                additional_hours = self.HOURS[num][0]
+            except KeyError:
+                raise InvalidExpirationFieldValue
+            else:
+                expiration = now + datetime.timedelta(hours=additional_hours)
+                self.expiration = expiration
 
     def set_content(self, content):
         if content:
@@ -55,9 +59,6 @@ class Notes(Base):
         Set note status to expired, so it is no longer displayed.
         '''
         self.expired = True
-
-    def get_expiration_as_text(self, num):
-        return self.HOURS[num][1]
         
     @property
     def serialize(self):
