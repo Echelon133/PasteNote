@@ -1,6 +1,7 @@
 from sqlalchemy import (Column, String, Text, Bool, DateTime)
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from exceptions import CannotCreateEmptyNote
 import datetime
 
 
@@ -15,6 +16,12 @@ class Notes(Base):
     content = Column(Text())
     expired = Column(Bool())
 
+    def set_title(self, title):
+        if title:
+            self.title = title
+        else:
+            self.title = 'Untitled'
+
     def set_expiration(self, num):
         
         self.HOURS = {0: (1, 'One hour'), 
@@ -28,6 +35,12 @@ class Notes(Base):
         additional_hours = self.HOURS[num][0]
         expiration = now + datetime.timedelta(hours=additional_hours)
         self.expiration = expiration
+
+    def set_content(self, content):
+        if content:
+            self.content = content
+        else:
+            raise CannotCreateEmptyNote()
 
     def mark_as_expired(self):
         '''
