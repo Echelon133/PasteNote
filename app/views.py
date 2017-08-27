@@ -47,4 +47,13 @@ def add_note():
 
 @app.route('/notes/<string:hash>', methods=['GET'])
 def get_note(hash):
-    pass
+    try:
+        note = session.query(Notes).filter_by(hash=hash).one()
+    except NoResultFound:
+        return render_template('404.html', hash=hash)
+    else:
+        if note.expired is True:
+            return render_template('404.html', hash=hash)
+        else:
+            return render_template('note_display.html', title=note.title,
+                                   content=note.content)
