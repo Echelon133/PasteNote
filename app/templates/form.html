@@ -25,7 +25,40 @@
         <label for="contentText">Note content</label>
         <textarea class="form-control" id="contentText" rows="15"></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Save note</button>
+    <button type="submit" id="button" class="btn btn-primary">Save note</button>
 </form>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let btn = document.getElementById('button');
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        let title = document.getElementById('inputTitle').value;
+        let expiration = document.getElementById('expireIn').value;
+        let content = document.getElementById('contentText').value;
+
+        let request = new XMLHttpRequest();
+        let formData = getFormDataObject(title, expiration, content);
+        
+
+        request.open("POST", "/notes", false);
+        request.send(formData);
+
+    });
+
+    function getFormDataObject(title, expiration, content) {
+        let formData = new FormData();
+        formData.append("title", title);
+        formData.append("expiration", expiration);
+        formData.append("content", content);
+        return formData;
+    }
+
+    function emptyContentWarning() {
+        // To be implemented
+    }    
+</script>
 {% endblock %}
