@@ -3,6 +3,7 @@ from sqlalchemy import (Column, String, Text, Boolean, DateTime)
 from sqlalchemy.ext.declarative import declarative_base
 from .helper_functions import get_hash
 from sqlalchemy import create_engine
+from flask import url_for
 import datetime
 
 
@@ -66,7 +67,8 @@ class Notes(Base):
         
     @property
     def serialize(self):
-        return {'hash': self.hash, 'title': self.title, 'content': self.content}
+        full_url = url_for('home_page', _external=True) + self.hash
+        return {'url': full_url, 'title': self.title, 'content': self.content}
 
 
 engine = create_engine('sqlite:///database.db')
