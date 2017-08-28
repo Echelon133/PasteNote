@@ -32,12 +32,12 @@ def add_note():
         new_note.set_expiration(expiration)
     except InvalidExpirationFieldValue:
         # When expiration is not a number in 0..5
-        return jsonify({'error': 'Invalid value of expiration field'})
+        return jsonify({'error': 'EXPIRATION_FIELD_INVALID'})
 
     try:
         new_note.set_content(content)
     except CannotCreateEmptyNote:
-        return jsonify({'error': 'Content field cannot be empty'})
+        return jsonify({'error': 'CONTENT_FIELD_INVALID'})
 
     new_note.set_hash()
     session.add(new_note)
