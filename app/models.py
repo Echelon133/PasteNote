@@ -67,7 +67,7 @@ class Notes(Base):
         
     @property
     def serialize(self):
-        full_url = url_for('get_note', _external=True) + self.hash
+        full_url = url_for('get_note', _external=True, hash=self.hash)
         return {'url': full_url, 'title': self.title, 'content': self.content}
 
 
