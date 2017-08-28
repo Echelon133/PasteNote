@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def home_page():
-    return render_template('main.html')
+    return render_template('form.html')
 
 
 @app.route('/notes', methods=['POST'])
@@ -55,5 +55,5 @@ def get_note(hash):
         if note.expired is True:
             return render_template('404.html', hash=hash)
         else:
-            return render_template('note_display.html', title=note.title,
+            return render_template('display.html', title=note.title,
                                    content=note.content)
