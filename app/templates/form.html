@@ -3,50 +3,80 @@
 {% block title %}PasteNote{% endblock %}
 
 {% block content %}
+<form id="main">
+    <div class="sending-form">
+        <div class="form-group">
+            <label for="inputTitle">Title</label>
+            <input type="text" class="form-control" id="inputTitle" aria-describedby="title" placeholder="Title">
+            <small id="titleHelp" class="form-text text-muted">Will be set to 'Untitled' if left blank</small>
+        </div>
+        <div class="form-group">
+            <label for="expireIn">Expire in</label>
+            <select class="form-control" id="expireIn">
+                <option value="0">One hour</option>
+                <option value="1">Six hours</option>
+                <option value="2">Twelve hours</option>
+                <option value="3">One day</option>
+                <option value="4">One week</option>
+                <option value="5">Never</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="contentText">Note content</label>
+            <textarea class="form-control" id="contentText" rows="15"></textarea>
+        </div>
+        <button type="submit" id="button" class="btn btn-primary">Save note</button>
+    </div>
 
-<form id="mainForm">
-    <div class="form-group">
-        <label for="inputTitle">Title</label>
-        <input type="text" class="form-control" id="inputTitle" aria-describedby="title" placeholder="Title">
-        <small id="titleHelp" class="form-text text-muted">Will be set to 'Untitled' if left blank</small>
+    <div class="result-box" style="display:none;">
+        <h1 class="text-center" id="noteTitle"></h1>
+        <div class="form-group">
+            <input type="text" class="form-control" id="noteLink" aria-describedby="link">
+        </div>
+        <button id="button-copy" class="btn btn-primary">Copy to clipboard</button>
     </div>
-    <div class="form-group">
-        <label for="expireIn">Expire in</label>
-        <select class="form-control" id="expireIn">
-          <option value="0">One hour</option>
-          <option value="1">Six hours</option>
-          <option value="2">Twelve hours</option>
-          <option value="3">One day</option>
-          <option value="4">One week</option>
-          <option value="5">Never</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="contentText">Note content</label>
-        <textarea class="form-control" id="contentText" rows="15"></textarea>
-    </div>
-    <button type="submit" id="button" class="btn btn-primary">Save note</button>
+
 </form>
 
 {% endblock %}
 
 {% block scripts %}
 <script>
-    let btn = document.getElementById('button');
-    btn.addEventListener('click', function(e) {
+    let btn = document.getElementById("button");
+    btn.addEventListener("click", function(e) {
         e.preventDefault();
 
-        let title = document.getElementById('inputTitle').value;
-        let expiration = document.getElementById('expireIn').value;
-        let content = document.getElementById('contentText').value;
+        let title = document.getElementById("inputTitle").value;
+        let expiration = document.getElementById("expireIn").value;
+        let content = document.getElementById("contentText").value;
 
         let request = new XMLHttpRequest();
-        let formData = getFormDataObject(title, expiration, content);
         
+        request.onreadystatechange = function() {
+            if (this.readyState == 4 & this.status == 200) {
+                let res = JSON.parse(this.responseText);
+                if (res.error === "CONTENT_FIELD_INVALID") {
+                    alert('Content field cannot be empty')
+                } else {
+                    title = res['note'].title;
+                    url = res['note'].url;
+                    hideSendingForm();
+                    showResultBox(title, url);
+                }
+            }   
+        };
+
+        let formData = getFormDataObject(title, expiration, content);
 
         request.open("POST", "/notes", false);
         request.send(formData);
 
+    });
+
+    let copy = document.getElementById("button-copy");
+    copy.addEventListener("click", function(e) {
+        e.preventDefault();
+        copyUrlToClipboard();
     });
 
     function getFormDataObject(title, expiration, content) {
@@ -57,8 +87,23 @@
         return formData;
     }
 
-    function emptyContentWarning() {
-        // To be implemented
-    }    
+    function hideSendingForm() {
+        form = document.getElementsByClassName("sending-form")[0];
+        form.style.display = "none";
+    }
+
+    function showResultBox(title, url) {
+        titleField = document.getElementById("noteTitle").innerHTML = title;
+        urlField = document.getElementById("noteLink").value = url;
+
+        resultBox = document.getElementsByClassName("result-box")[0];
+        resultBox.style.display = "block"
+    }
+
+    function copyUrlToClipboard() {
+        let copyText = document.querySelector("#noteLink");
+        copyText.select();
+        document.execCommand("copy");
+    }
 </script>
 {% endblock %}
