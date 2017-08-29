@@ -53,7 +53,7 @@ def get_note(hash):
     except NoResultFound:
         return render_template('404.html', hash=hash)
     else:
-        if note.expired is True:
+        if note.is_expired():
             return render_template('404.html', hash=hash)
         else:
             if action == 'raw':

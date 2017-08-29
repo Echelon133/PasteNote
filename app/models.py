@@ -16,7 +16,6 @@ class Notes(Base):
     title = Column(String())
     expiration = Column(DateTime())
     content = Column(Text())
-    expired = Column(Boolean())
 
     def set_hash(self):
         self.hash = get_hash()
@@ -59,11 +58,11 @@ class Notes(Base):
         else:
             raise CannotCreateEmptyNote()
 
-    def mark_as_expired(self):
-        '''
-        Set note status to expired, so it is no longer displayed.
-        '''
-        self.expired = True
+    def is_expired(self):
+        if self.expiration < datetime.datetime.now():
+            return True
+        else:
+            return False
         
     @property
     def serialize(self):
