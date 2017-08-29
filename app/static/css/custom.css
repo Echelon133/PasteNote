@@ -3,8 +3,36 @@ body {
 }
 
 
-#mainForm {
+#main {
     width:80%;
     margin:auto;
 }
 
+.note-content {
+    background-color: #f9f9f9;
+}
+
+.display-menu {
+    list-style-type: none;
+}
+
+.display-menu li {
+    display: inline;
+}
+
+.display-menu-item {
+    background-color: grey;
+    color: white;
+    padding:5px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.display-menu-item a:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+.display-menu-item a:visited {
+    color: white;
+}
