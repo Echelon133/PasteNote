@@ -1,6 +1,5 @@
 import os
 import uuid
-import datetime
 
 
 def get_hash():
