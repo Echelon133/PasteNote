@@ -1,4 +1,4 @@
-from .exceptions import CannotCreateEmptyNote, InvalidExpirationFieldValue
+from .exceptions import CannotCreateEmptyNote, InvalidExpirationFieldValue, ExpirationFieldEmpty
 from sqlalchemy import (Column, String, Text, Boolean, DateTime)
 from sqlalchemy.ext.declarative import declarative_base
 from .helper_functions import get_hash
@@ -38,6 +38,8 @@ class Notes(Base):
             num = int(num)
         except ValueError:
             raise InvalidExpirationFieldValue()
+        except TypeError:
+            raise ExpirationFieldEmpty()
 
         if num == 5:
             # Set expiration date to the max value possible

@@ -1,4 +1,5 @@
-from .exceptions import CannotCreateEmptyNote, InvalidExpirationFieldValue
+from .exceptions import (CannotCreateEmptyNote, InvalidExpirationFieldValue, 
+                         ExpirationFieldEmpty)
 from flask import Flask, request, jsonify, render_template, send_file
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.exc import NoResultFound
@@ -34,11 +35,13 @@ def add_note():
     except InvalidExpirationFieldValue:
         # When expiration is not a number in 0..5
         return jsonify({'error': 'EXPIRATION_FIELD_INVALID'})
+    except ExpirationFieldEmpty:
+        return jsonify({'error': 'EXPIRATION_FIELD_EMPTY'})
 
     try:
         new_note.set_content(content)
     except CannotCreateEmptyNote:
-        return jsonify({'error': 'CONTENT_FIELD_INVALID'})
+        return jsonify({'error': 'CONTENT_FIELD_EMPTY'})
 
     new_note.set_hash()
     session.add(new_note)

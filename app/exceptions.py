@@ -4,3 +4,7 @@ class CannotCreateEmptyNote(Exception):
 
 class InvalidExpirationFieldValue(Exception):
     pass
+
+
+class ExpirationFieldEmpty(Exception):
+    pass
