@@ -13,7 +13,7 @@ Base = declarative_base()
 class Notes(Base):
     __tablename__ = 'notes'
     hash = Column(String(10), primary_key=True)
-    title = Column(String())
+    title = Column(String(80))
     expiration = Column(DateTime())
     content = Column(Text())
 
@@ -21,6 +21,7 @@ class Notes(Base):
         self.hash = get_hash()
 
     def set_title(self, title):
+        title = title[:80]
         if title:
             self.title = title
         else:
