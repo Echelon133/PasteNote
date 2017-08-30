@@ -10,6 +10,8 @@ body {
 
 .note-content {
     background-color: #f9f9f9;
+    overflow: auto;
+    white-space: pre-wrap;
 }
 
 .display-menu {
