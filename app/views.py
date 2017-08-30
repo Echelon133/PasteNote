@@ -1,7 +1,8 @@
 from .exceptions import CannotCreateEmptyNote, InvalidExpirationFieldValue
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_file
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.exc import NoResultFound
+from .helper_functions import create_file
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from .models import Base, Notes
@@ -59,6 +60,11 @@ def get_note(hash):
             if action == 'raw':
                 return render_template('raw-display.html', title=note.title, 
                                        content=note.content)
+            elif action == 'download':
+                filename = note.hash
+                content = note.content
+                file_path = create_file(filename, content)
+                return send_file(file_path, mimetype='txt', as_attachment=True)
             else:
                 return render_template('display.html', title=note.title,
                                        content=note.content)
