@@ -20,14 +20,14 @@ class Notes(Base):
     def set_hash(self):
         self.hash = get_hash()
 
-    def set_title(self, title):
-        title = title[:80]
+    def set_title(self, title=''):
+        title = str(title)[:80]
         if title:
             self.title = title
         else:
             self.title = 'Untitled'
 
-    def set_expiration(self, num):
+    def set_expiration(self, num=None):
         self.HOURS = {0: (1, 'One hour'), 
                       1: (6, 'Six hours'),
                       2: (12, 'Twelve hours'),
@@ -55,7 +55,7 @@ class Notes(Base):
                 expiration = now + datetime.timedelta(hours=additional_hours)
                 self.expiration = expiration
 
-    def set_content(self, content):
+    def set_content(self, content=None):
         if content:
             self.content = content
         else:
