@@ -38,3 +38,11 @@ body {
 .display-menu-item a:visited {
     color: white;
 }
+
+.error-number {
+    font-size: 70px;
+}
+
+.error-text {
+    font-size: 35px;
+}
