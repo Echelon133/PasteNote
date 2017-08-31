@@ -1,4 +1,5 @@
 from app.unittests.models_test import ModelsUnittest
+from app.unittests.views_test import ViewsUnittest
 import unittest
 
 
@@ -11,5 +12,6 @@ if __name__ == '__main__':
 
     suite = NotesAppSuite()
     suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(ModelsUnittest))
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(ViewsUnittest))
 
     unittest.TextTestRunner().run(suite)
