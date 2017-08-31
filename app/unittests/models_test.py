@@ -1,26 +1,13 @@
 from ..exceptions import (InvalidExpirationFieldValue, ExpirationFieldEmpty, 
                           CannotCreateEmptyNote)
+from .base import NoteAppTestCase
 from ..models import Notes
-import unittest
+from ..views import app
 import datetime
 import random
-import uuid
-from flask import jsonify
-import json
-from ..views import app
 
 
-def get_random_string():
-    length = random.randint(1, 31)
-    string = uuid.uuid4().hex
-    return string[:length]
-
-
-def get_dates_delta(date1, date2):
-    return date1 - date2
-
-
-class ModelsUnittest(unittest.TestCase):
+class ModelsUnittest(NoteAppTestCase):
     
     def setUp(self):
         self.note = Notes()
@@ -60,7 +47,7 @@ class ModelsUnittest(unittest.TestCase):
         now = datetime.datetime.now()
         expiration = self.note.expiration
 
-        date_delta = get_dates_delta(expiration, now)
+        date_delta = self.get_dates_delta(expiration, now)
         date_delta_seconds = date_delta.total_seconds()
         week_seconds = datetime.timedelta(hours=24*7).total_seconds()
         self.assertAlmostEqual(date_delta_seconds, week_seconds, places=4)
@@ -70,7 +57,7 @@ class ModelsUnittest(unittest.TestCase):
         now = datetime.datetime.now()
         expiration = self.note.expiration
 
-        date_delta = get_dates_delta(expiration, now)
+        date_delta = self.get_dates_delta(expiration, now)
         date_delta_seconds = date_delta.total_seconds()
         week_seconds = datetime.timedelta(hours=24).total_seconds()
         self.assertAlmostEqual(date_delta_seconds, week_seconds, places=4)
@@ -81,7 +68,7 @@ class ModelsUnittest(unittest.TestCase):
             self.note.set_expiration(random_number)
 
         # Give some random string as an argument
-        random_string = get_random_string()
+        random_string = self.get_random_string()
         with self.assertRaises(InvalidExpirationFieldValue):
             self.note.set_expiration(random_string)
 
@@ -96,7 +83,7 @@ class ModelsUnittest(unittest.TestCase):
 
         # Set content to some random string 10 times
         for x in range(10):
-            random_string = get_random_string() * 50
+            random_string = self.get_random_string() * 50
             self.note.set_content(random_string)
             self.assertEqual(random_string, self.note.content)
 
@@ -113,13 +100,13 @@ class ModelsUnittest(unittest.TestCase):
             self.note.set_hash()
             hash_ = self.note.hash 
 
-            title = get_random_string()
+            title = self.get_random_string()
             self.note.set_title(title)
 
             expiration_mode = random.randint(0, 5)
             self.note.set_expiration(expiration_mode)
 
-            content = get_random_string() * 50
+            content = self.get_random_string() * 50
             self.note.set_content(content)
 
             # Serialize a note
