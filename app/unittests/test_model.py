@@ -50,7 +50,7 @@ class ModelsUnittest(NoteAppTestCase):
         date_delta = self.get_dates_delta(expiration, now)
         date_delta_seconds = date_delta.total_seconds()
         week_seconds = datetime.timedelta(hours=24*7).total_seconds()
-        self.assertAlmostEqual(date_delta_seconds, week_seconds, places=4)
+        self.assertAlmostEqual(date_delta_seconds, week_seconds, places=2)
 
         # Expire in a day
         self.note.set_expiration(3)
