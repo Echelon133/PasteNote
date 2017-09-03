@@ -10,4 +10,5 @@ $ flask run
     Templates done with Boostrap v4
     Sending forms and receiving JSON with Javascript
     Backend uses Flask microframework and SQLAlchemy ORM
+    Tests written using Python's unittest and Selenium Webdriver
 
