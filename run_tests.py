@@ -1,5 +1,5 @@
-from app.unittests.models_test import ModelsUnittest
-from app.unittests.views_test import ViewsUnittest
+from app.unittests.test_model import ModelsUnittest
+from app.unittests.test_views import ViewsUnittest
 import unittest
 
 
