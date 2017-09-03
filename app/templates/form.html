@@ -57,7 +57,7 @@
         request.onreadystatechange = function() {
             if (this.readyState == 4 & this.status == 200) {
                 let res = JSON.parse(this.responseText);
-                if (res.error === "CONTENT_FIELD_INVALID") {
+                if (res.error === "CONTENT_FIELD_EMPTY") {
                     alert('Content field cannot be empty')
                 } else {
                     title = res['note'].title;
