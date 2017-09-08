@@ -4,16 +4,16 @@ from app.functionaltests.test_cases import NoteFunctionalTest
 import unittest
 
 
-class NotesAppSuite(unittest.TestSuite):
-    pass
+def load_tests(test_case):
+    return unittest.defaultTestLoader.loadTestsFromTestCase(test_case)
 
 
 if __name__ == '__main__':
     result = unittest.TestResult()
 
-    suite = NotesAppSuite()
-    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(ModelsUnittest))
-    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(ViewsUnittest))
-    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(NoteFunctionalTest))
+    suite = unittest.TestSuite()
+    suite.addTests(load_tests(ModelsUnittest))
+    suite.addTests(load_tests(ViewsUnittest))
+    suite.addTests(load_tests(NoteFunctionalTest))
 
     unittest.TextTestRunner().run(suite)
