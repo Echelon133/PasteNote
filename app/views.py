@@ -53,10 +53,10 @@ def get_note(hash):
     try:
         note = session.query(Notes).filter_by(hash=hash).one()
     except NoResultFound:
-        return render_template('404.html', hash=hash)
+        return render_template('404.html')
     else:
         if note.is_expired():
-            return render_template('404.html', hash=hash)
+            return render_template('404.html')
         else:
             if action == 'raw':
                 return render_template('raw-display.html', title=note.title, 
