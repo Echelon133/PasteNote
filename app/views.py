@@ -28,25 +28,23 @@ def add_note():
     content = request.form.get('content')
     
     new_note = Notes()
-
-    new_note.set_title(title)
+    
     try:
+        new_note.set_title(title)
         new_note.set_expiration(expiration)
+        new_note.set_content(content)
     except InvalidExpirationFieldValue:
         # When expiration is not a number in 0..5
         return jsonify({'error': 'EXPIRATION_FIELD_INVALID'})
     except ExpirationFieldEmpty:
         return jsonify({'error': 'EXPIRATION_FIELD_EMPTY'})
-
-    try:
-        new_note.set_content(content)
     except CannotCreateEmptyNote:
         return jsonify({'error': 'CONTENT_FIELD_EMPTY'})
-
-    new_note.set_hash()
-    session.add(new_note)
-    session.commit()
-    return jsonify(note=new_note.serialize)
+    else:
+        new_note.set_hash()
+        session.add(new_note)
+        session.commit()
+        return jsonify(note=new_note.serialize)
 
 
 @app.route('/notes/<string:hash>', methods=['GET'])
