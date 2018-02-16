@@ -1,5 +1,3 @@
-[Check this app online](http://echelon133.usermd.net/)
-
 # PasteNote
 Simple app for saving pasted-in notes. Written using flask.
 
